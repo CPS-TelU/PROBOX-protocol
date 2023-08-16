@@ -7,10 +7,8 @@ const insertHistory = async (uid, status, tap, timestamp) => {
 
   try {
     const [result] = await dbConnection.query(sql, values);
-    // console.log("Data inserted successfully:", result);
     return result;
   } catch (error) {
-    // console.error("Error inserting data:", error);
     throw error;
   }
 };

@@ -50,14 +50,13 @@ const fetchTelemetryData = async () => {
   }
 };
 
-// Jadwalkan panggilan fetchTelemetryData menggunakan cron
 cron.schedule("* * * * * *", async () => {
   await fetchTelemetryData();
 });
 
 const getAllHistoryController = async (req, res) => {
   try {
-    const historyData = await getAllHistory(); // Panggil fungsi getAllHistory untuk mendapatkan data dari database
+    const historyData = await getAllHistory();
 
     if (Array.isArray(historyData)) {
       res.json({
