@@ -1,8 +1,8 @@
 const express = require("express");
-const proboxController = require("../controller/probox");
+const { getAllHistoryController } = require("../controller/probox");
 
 const router = express.Router();
 
-router.post("/probox/history", proboxController.createHistoryController);
+router.get("/probox/history", getAllHistoryController);
 
 module.exports = router;
