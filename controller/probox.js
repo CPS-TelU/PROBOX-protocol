@@ -1,84 +1,75 @@
-const axios = require("axios");
-const { format } = require("date-fns");
-const { insertHistory, getAllHistory } = require("../models/probox");
-const {
-  iotCentralAppUrl,
-  deviceId,
-  sasToken,
-} = require("../config/azureConfig");
-const cron = require("node-cron");
+const { getLatestData, getAllHistory } = require("../models/probox");
+const { utcToZonedTime, format } = require("date-fns-tz");
 
-const fetchTelemetryData = async () => {
+function formatTimestamp(timestamp) {
+  const timeZone = "Asia/Jakarta";
+  const zonedTime = utcToZonedTime(timestamp, timeZone);
+  return format(zonedTime, "yyyy-MM-dd HH:mm:ss", { timeZone });
+}
+
+const getLastDataController = async (req, res) => {
   try {
-    const telemetry1Response = await axios.get(
-      `${iotCentralAppUrl}/api/preview/devices/${deviceId}/telemetry/uid`,
-      {
-        headers: {
-          Authorization: `SharedAccessSignature ${sasToken}`,
-        },
-      }
-    );
+    const dataDB = await getLatestData();
 
-    const telemetry2Response = await axios.get(
-      `${iotCentralAppUrl}/api/preview/devices/${deviceId}/telemetry/box`,
-      {
-        headers: {
-          Authorization: `SharedAccessSignature ${sasToken}`,
-        },
-      }
-    );
+    const getData = {
+      id: dataDB[0].id || null,
+      uid: dataDB[0].uid || null,
+      status: dataDB[0].status || null,
+      selenoid: dataDB[0].selenoid || null,
+      timestamp: dataDB[0].timestamp
+        ? formatTimestamp(dataDB[0].timestamp)
+        : null,
+    };
 
-    const telemetry3Response = await axios.get(
-      `${iotCentralAppUrl}/api/preview/devices/${deviceId}/telemetry/tap`,
-      {
-        headers: {
-          Authorization: `SharedAccessSignature ${sasToken}`,
-        },
-      }
-    );
-
-    const UID = telemetry1Response.data.value || null;
-    const status = telemetry2Response.data.value;
-    const tap = telemetry3Response.data.value;
-    const timestamp = format(new Date(), "dd-MM-yyyy HH:mm:ss");
-
-    if (UID !== null) {
-      await insertHistory(UID, status, tap, timestamp);
-    }
+    res.status(200).json({
+      status: 200,
+      message: "GET last data success",
+      data: getData,
+    });
   } catch (error) {
-    console.error("Error fetching telemetry data:", error);
+    res.status(500).json({
+      status: 500,
+      error: {
+        message: error.message,
+      },
+    });
   }
 };
 
-// Jadwalkan panggilan fetchTelemetryData menggunakan cron
-cron.schedule("* * * * * *", async () => {
-  await fetchTelemetryData();
-});
-
 const getAllHistoryController = async (req, res) => {
   try {
-    const historyData = await getAllHistory(); // Panggil fungsi getAllHistory untuk mendapatkan data dari database
+    const historyData = await getAllHistory();
 
     if (Array.isArray(historyData)) {
+      const formattedData = historyData.map((data) => ({
+        ...data,
+        timestamp: formatTimestamp(data.timestamp),
+      }));
+
       res.json({
+        status: 200,
         message: "GET all history success",
-        data: historyData,
+        data: formattedData,
       });
     } else {
       res.status(500).json({
-        message: "Server Error",
-        error: "Unexpected data format",
+        status: 500,
+        errors: {
+          message: "Unexpected data format: history data is not an array",
+        },
       });
     }
   } catch (error) {
     res.status(500).json({
-      message: "Server Error",
-      error: error.message,
+      status: 500,
+      errors: {
+        message: error.message,
+      },
     });
   }
 };
 
 module.exports = {
-  fetchTelemetryData,
   getAllHistoryController,
+  getLastDataController,
 };
