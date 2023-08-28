@@ -9,6 +9,7 @@
       "url": "https://probox-supabase.vercel.app"
     }
   ],
+<<<<<<< HEAD
   "components": {
     "securitySchemes": {
       "apiKeyAuth": {
@@ -27,6 +28,12 @@
             "apiKeyAuth": []
           }
         ],
+=======
+  "paths": {
+    "/api/probox": {
+      "get": {
+        "summary": "Get last data",
+>>>>>>> 30b590663edadcd8a7b7dae1ef3e93588e0b4d40
         "responses": {
           "200": {
             "description": "GET last data success",
@@ -68,11 +75,14 @@
     "/api/probox/history": {
       "get": {
         "summary": "Get all history data",
+<<<<<<< HEAD
         "security": [
           {
             "apiKeyAuth": []
           }
         ],
+=======
+>>>>>>> 30b590663edadcd8a7b7dae1ef3e93588e0b4d40
         "responses": {
           "200": {
             "description": "GET all history success",
