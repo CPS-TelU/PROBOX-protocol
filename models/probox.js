@@ -1,31 +1,35 @@
-const dbConnection = require("../config/dbConfig");
+const supabase = require("../config/supabaseConfig");
 
-const insertHistory = async (uid, status, tap, timestamp) => {
-  const sql = `INSERT INTO history(uid, status,tap, timestamp)
-    VALUES (?, ?, ?)`;
-  const values = [uid, status, tap, timestamp];
+const getLatestData = async () => {
+  const { data, error } = await supabase
+    .from("sensor")
+    .select("*")
+    .order("id", { ascending: false })
+    .limit(1);
 
-  try {
-    const [result] = await dbConnection.query(sql, values);
-    return result;
-  } catch (error) {
+  if (error) {
     throw error;
   }
+
+  return data;
 };
 
 const getAllHistory = async () => {
-  const query =
-    "SELECT * FROM history WHERE id < (SELECT MAX(id) FROM history) ORDER BY id DESC LIMIT 4";
+  const { data, error } = await supabase
+    .from("sensor")
+    .select("*")
+    .order("id", { ascending: false });
 
-  try {
-    const [results] = await dbConnection.query(query);
-    return results;
-  } catch (error) {
+  if (error) {
     throw error;
   }
+
+  const historyData = data.slice(1, data.length - 0);
+
+  return historyData;
 };
 
 module.exports = {
-  insertHistory,
   getAllHistory,
+  getLatestData,
 };
