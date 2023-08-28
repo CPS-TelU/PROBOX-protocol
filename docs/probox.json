@@ -4,57 +4,31 @@
     "title": "Probox API",
     "version": "1.0"
   },
-  "servers": [{ "url": "https://probox-supabase.vercel.app" }],
+  "servers": [
+    {
+      "url": "https://probox-supabase.vercel.app"
+    }
+  ],
   "paths": {
     "/api/probox": {
       "get": {
-        "description": "Get last data",
-        "parameters": [],
+        "summary": "Get last data",
         "responses": {
           "200": {
             "description": "GET last data success",
             "content": {
               "application/json": {
-                "examples": {
-                  "Last data": {
-                    "description": "GET last data success",
-                    "value": {
+                "example": {
+                  "status": 200,
+                  "data": [
+                    {
                       "id": 6,
                       "uid": "BE8JT6",
                       "status": "TIDAK ADA BARANG",
                       "selenoid": "TUTUP",
                       "timestamp": "2023-08-24 13:49:06"
                     }
-                  }
-                },
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": 200,
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "number"
-                        },
-                        "uid": {
-                          "type": "string"
-                        },
-                        "status": {
-                          "type": "string"
-                        },
-                        "selenoid": {
-                          "type": "string"
-                        },
-                        "timestamp": {
-                          "type": "string"
-                        }
-                      }
-                    },
-                    "errors": {
-                      "type": "object"
-                    }
-                  }
+                  ]
                 }
               }
             }
@@ -63,33 +37,13 @@
             "description": "Internal Server Error",
             "content": {
               "application/json": {
-                "examples": {
-                  "Last data": {
-                    "description": "Internal Server Error",
-                    "value": {
-                      "status": 500,
-                      "errors": [
-                        {
-                          "message": "Internal Server Error"
-                        }
-                      ]
+                "example": {
+                  "status": 500,
+                  "errors": [
+                    {
+                      "message": "Internal Server Error"
                     }
-                  }
-                },
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "number"
-                    },
-                    "errors": {
-                      "properties": {
-                        "message": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
+                  ]
                 }
               }
             }
@@ -99,86 +53,51 @@
     },
     "/api/probox/history": {
       "get": {
-        "description": "Get last data",
-        "parameters": [],
+        "summary": "Get all history data",
         "responses": {
           "200": {
             "description": "GET all history success",
             "content": {
               "application/json": {
-                "examples": {
-                  "Last data": {
-                    "description": "GET all history success",
-                    "value": {
-                      "status": 200,
-                      "data": [
-                        {
-                          "id": 5,
-                          "uid": "BE8JT6",
-                          "status": "ADA BARANG",
-                          "selenoid": "BUKA",
-                          "timestamp": "2023-08-24 13:49:06"
-                        },
-                        {
-                          "id": 4,
-                          "uid": "BE8JT6",
-                          "status": "TIDAK ADA BARANG",
-                          "selenoid": "TUTUP",
-                          "timestamp": "2023-08-24 13:49:06"
-                        },
-                        {
-                          "id": 3,
-                          "uid": "BE8JT6",
-                          "status": "ADA BARANG",
-                          "selenoid": "BUKA",
-                          "timestamp": "2023-08-24 13:49:06"
-                        },
-                        {
-                          "id": 2,
-                          "uid": "BE8JT6",
-                          "status": "TIDAK ADA BARANG",
-                          "selenoid": "TUTUP",
-                          "timestamp": "2023-08-24 13:49:06"
-                        },
-                        {
-                          "id": 1,
-                          "uid": "BE8JT6",
-                          "status": "ADA BARANG",
-                          "selenoid": "BUKA",
-                          "timestamp": "2023-08-24 13:49:06"
-                        }
-                      ]
-                    }
-                  }
-                },
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": 200,
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "number"
-                        },
-                        "uid": {
-                          "type": "string"
-                        },
-                        "status": {
-                          "type": "string"
-                        },
-                        "selenoid": {
-                          "type": "string"
-                        },
-                        "timestamp": {
-                          "type": "string"
-                        }
-                      }
+                "example": {
+                  "status": 200,
+                  "data": [
+                    {
+                      "id": 5,
+                      "uid": "BE8JT6",
+                      "status": "ADA BARANG",
+                      "selenoid": "BUKA",
+                      "timestamp": "2023-08-24 13:49:06"
                     },
-                    "errors": {
-                      "type": "object"
+                    {
+                      "id": 4,
+                      "uid": "BE8JT6",
+                      "status": "TIDAK ADA BARANG",
+                      "selenoid": "TUTUP",
+                      "timestamp": "2023-08-24 13:49:06"
+                    },
+                    {
+                      "id": 3,
+                      "uid": "BE8JT6",
+                      "status": "ADA BARANG",
+                      "selenoid": "BUKA",
+                      "timestamp": "2023-08-24 13:49:06"
+                    },
+                    {
+                      "id": 2,
+                      "uid": "BE8JT6",
+                      "status": "TIDAK ADA BARANG",
+                      "selenoid": "TUTUP",
+                      "timestamp": "2023-08-24 13:49:06"
+                    },
+                    {
+                      "id": 1,
+                      "uid": "BE8JT6",
+                      "status": "ADA BARANG",
+                      "selenoid": "BUKA",
+                      "timestamp": "2023-08-24 13:49:06"
                     }
-                  }
+                  ]
                 }
               }
             }
@@ -187,33 +106,13 @@
             "description": "Internal Server Error",
             "content": {
               "application/json": {
-                "examples": {
-                  "Last data": {
-                    "description": "Internal Server Error",
-                    "value": {
-                      "status": 500,
-                      "errors": [
-                        {
-                          "message": "Internal Server Error"
-                        }
-                      ]
+                "example": {
+                  "status": 500,
+                  "errors": [
+                    {
+                      "message": "Internal Server Error"
                     }
-                  }
-                },
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "number"
-                    },
-                    "errors": {
-                      "properties": {
-                        "message": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
+                  ]
                 }
               }
             }
